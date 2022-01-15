@@ -1,0 +1,4 @@
+[DEFAULT]
+PREVIOUS_ANSWERS_DIR = data/answers
+ANSWERS_JSON_PATH = data/collected.json
+
