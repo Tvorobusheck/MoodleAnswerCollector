@@ -107,17 +107,17 @@ class QuestionHTMLParser(HTMLParser):
             self.atext_flag_p = False
 
     def handle_data(self, data):
-        if self.qtext_flag_p:
+        if self.qtext_flag_p and self.current_text is None:
             self.current_text = data
             print("Found the text: ", data)
-        if self.atext_flag_p:
+        if self.atext_flag_p and self.current_answer is None:
             self.current_answer = data
             print("Found the answer: ", data)
 
 
 def parse_html(html_file: str):
-    with open(html_file, 'r') as html_input:
-        contents = html_input.read()
+    with open(html_file, 'rb') as html_input:
+        contents = html_input.read().decode('utf8')
         parser = QuestionHTMLParser()
         parser.feed(contents)
         return parser.questions
@@ -140,8 +140,8 @@ def main():
                 answers = json.loads(json_input.read())
         answers.update(parsed_answers)
 
-        with open(answers_json_path, 'w') as json_output:
-            json_output.write(json.dumps(answers))
+        with open(answers_json_path, 'wb') as json_output:
+            json_output.write(bytes(json.dumps(answers), encoding='UTF-8'))
 
 
 if __name__ == '__main__':
